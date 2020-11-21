@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "setup" : "/users/minhg/mongodb/bin/mongod.exe -dbpath=/users/minhg/mongodb"
+    "setup": "/users/minhg/mongodb/bin/mongod.exe -dbpath=/users/minhg/mongodbdata",
+    "mongogui": " /Users/MinhG/Downloads/robo3t/robo3t/robo3t.exe "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^3.6.3"
+    "mongodb": "^3.6.3",
+    "npm-run-all": "^4.1.5"
   }
 }
