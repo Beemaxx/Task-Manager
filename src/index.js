@@ -71,11 +71,11 @@ app.get('/tasks/:id' , (req,res) => {
 
     Task.findById(taskid).then((task)=>{
         if(!task){
-           return res.status(500).send()
+           return res.status(404).send()
         }
         res.status(201).send(task)
     }).catch((error) => {
-        res.status(400).send()
+        res.status(500).send()
     })
 
 })
