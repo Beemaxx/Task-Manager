@@ -1,5 +1,6 @@
 const express = require('express')
-const { translateAliases } = require('./model/task')
+const { ObjectID } = require('mongodb')
+const { translateAliases, update } = require('./model/task')
 const Task = require('./model/task')
 const User = require('./model/user')
 require('./db/mongoose')
@@ -71,6 +72,32 @@ app.get('/users/:id', async (req,res) =>{
     // })
 })
 
+//Find ID & Update
+
+app.patch('/users/:id', async(req,res) => {
+        const updates = Object.keys(req.body)
+        const AllowedUpdates = ['name','email','password','age']
+        const isValidOperation = updates.every((update)=> AllowedUpdates.includes(update))
+
+        if(!isValidOperation){
+            return res.status(400).send({error : 'Invalid Updates'})
+        }
+    
+        const userid = req.params.id
+    try {
+        const update = await User.findByIdAndUpdate(userid, req.body, {new:true,runValidators: true})
+
+        if(!userid){
+            res.status(404).send()
+        }
+            res.send(update)
+    }catch(e) {
+            res.status(500).send()
+    }
+})
+
+
+
 
 app.post('/tasks', async (req,res)=>{ 
     const task = new Task(req.body)
@@ -135,8 +162,30 @@ app.get('/tasks/:id' , async (req,res) => {
 
 })
 
+//Find Task ID and update
 
+app.patch('/tasks/:id', async (req,res) =>{
 
+    const TaskUpdates = Object.keys(req.body)
+    const AllowedTasksUpdates = ['Completed','Description']
+    const TaskUpdateisValid = TaskUpdates.every((update) => AllowedTasksUpdates.includes((update)))
+   
+    if (!TaskUpdateisValid){
+        res.status(400).send({error :'Update is invalid'})
+    }
+    const taskid = req.params.id
+
+    try {
+        const task = await Task.findByIdAndUpdate(taskid, req.body, {new:true,runValidators:true})
+
+        if(!taskid){
+            res.status(404).send()
+        }
+            res.status(200).send(task)
+    } catch(e){
+        res.status(500).send()
+    }
+})
 
 
 
