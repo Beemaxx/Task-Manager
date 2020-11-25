@@ -1,24 +1,9 @@
 const express = require('express')
-const { ObjectID } = require('mongodb')
-const { translateAliases, update } = require('./model/task')
-const Task = require('./model/task')
-const User = require('./model/user')
-const userRouter = require('./routers/user.js')
-const taskRouter = require('./routers/task.js')
-require('./db/mongoose')
-require('./model/user')
+const router = new express.Router()
+const Task = require('../model/task.js')
 
 
-const app = express()
-const port = process.env.PORT || 3000
-
-app.use(express.json())
-app.use(userRouter)
-app.use(taskRouter)
-
-
-
-app.post('/tasks', async (req,res)=>{ 
+router.post('/tasks', async (req,res)=>{ 
     const task = new Task(req.body)
 
     try { 
@@ -37,7 +22,7 @@ app.post('/tasks', async (req,res)=>{
 })
 
 
-app.get('/tasks', async (req,res) => {
+router.get('/tasks', async (req,res) => {
     
     try { 
         const task = await Task.find({})
@@ -54,7 +39,7 @@ app.get('/tasks', async (req,res) => {
 })
 
 
-app.get('/tasks/:id' , async (req,res) => {
+router.get('/tasks/:id' , async (req,res) => {
 
     const taskid = req.params.id
 
@@ -83,7 +68,7 @@ app.get('/tasks/:id' , async (req,res) => {
 
 //Find Task ID and update
 
-app.patch('/tasks/:id', async (req,res) =>{
+router.patch('/tasks/:id', async (req,res) =>{
 
     const TaskUpdates = Object.keys(req.body)
     const AllowedTasksUpdates = ['Completed','Description']
@@ -108,7 +93,7 @@ app.patch('/tasks/:id', async (req,res) =>{
 
 //Delete Tasks
 
-app.delete('/Tasks/:id', async (req,res)=>{
+router.delete('/Tasks/:id', async (req,res)=>{
     const TaskID = req.params.id
 
     try {
@@ -127,8 +112,4 @@ app.delete('/Tasks/:id', async (req,res)=>{
 
 
 
-
-
-app.listen(port, () => {
-    console.log('Server is up on ' +port)
-})
+module.exports = router
