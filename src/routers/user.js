@@ -1,4 +1,5 @@
 const express = require('express')
+const { update } = require('../model/user.js')
 const router = new express.Router()
 const User = require('../model/user.js')
 
@@ -33,7 +34,7 @@ router.get('/users', async (req,res) => {
         res.status(201).send(users)
 
     } catch(e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 
     // User.find({}).then((users)=>{
@@ -55,7 +56,7 @@ router.get('/users/:id', async (req,res) =>{
     }
         res.send(user)
     } catch(e) {
-            res.status(500).send()
+            res.status(500).send(e)
     }
     // User.findById(userid).then((user) => {
     //     if (!user) {
@@ -79,15 +80,22 @@ router.patch('/users/:id', async(req,res) => {
         }
     
         const userid = req.params.id
-    try {
-        const update = await User.findByIdAndUpdate(userid, req.body, {new:true,runValidators: true})
+        try {
+            const user = await User.findById(userid)
+            console.log(user)
+            console.log(updates)
+            updates.forEach((update) => user[update] = req.body[update])
 
-        if(!userid){
-            res.status(404).send()
-        }
-            res.send(update)
-    }catch(e) {
-            res.status(500).send()
+            await user.save()
+
+        // const update = await User.findByIdAndUpdate(userid, req.body, {new:true,runValidators: true})
+
+            if(!userid){
+                res.status(404).send()
+            }
+                res.send(user)
+        }catch(e) {
+            res.status(400).send(e)
     }
 })
 
