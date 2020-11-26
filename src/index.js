@@ -29,7 +29,7 @@ const myFunction = async () => {
     console.log(password)
     console.log(hashedPassword)
 
-    const isMatch = await bcrypt.compare('123456',hashedPassword)
+    const isMatch = await bcrypt.compare(password,hashedPassword)
     console.log(isMatch)
 }
 
