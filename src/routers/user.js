@@ -7,12 +7,14 @@ router.get('/test', (req,res)=>{
     res.send('This is a test')
 })
 
+// Create a new User //
 router.post('/users', async (req,res)=>{
     const user = new User(req.body)
 
     try {
         await user.save()
-        res.status(201).send(user)
+        const token = await user.generateAuthToken()
+        res.status(201).send({user,token})
     } catch(e) {
         res.status(400).send(e)
     }
@@ -28,14 +30,18 @@ router.post('/users', async (req,res)=>{
 //Logging in for Users
 
 router.post('/users/login', async (req,res) => {
-    console.log(req.body.email, req.body.password)
+   // console.log(req.body.email, req.body.password)
     try { 
         const user = await User.findByCredentials(req.body.email, req.body.password)
-        res.send(user)
+        const token = await user.generateAuthToken()
+        res.send({user, token})
     } catch(e) {
        res.status(400).send()
     }
 })
+
+
+
 
 
 // Find users

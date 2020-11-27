@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const jwt = require('Jsonwebtoken')
 
 const UserSchema = new mongoose.Schema( {
     name: {
@@ -36,10 +37,28 @@ const UserSchema = new mongoose.Schema( {
                 throw new Error('Password can not contain password')
             }
         }
-    }
+    }, tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 
 })
 
+//create token generator
+
+UserSchema.methods.generateAuthToken = async function () {
+    const user = this
+    const token = jwt.sign({_id: user._id.toString() }, 'sampletoken')
+
+    user.tokens = user.tokens.concat({token})
+    await user.save()
+    return token
+}
+
+
+//create new function
 UserSchema.statics.findByCredentials = async (email, password) => {
     
     const user = await User.findOne({ email })
@@ -50,10 +69,10 @@ UserSchema.statics.findByCredentials = async (email, password) => {
         throw new Error('Unable to log in')
     }
 
-    const isMatch = await bcrypt.compare( password, user.password)
+    const isMatched = await bcrypt.compare( password, user.password)
 
 
-    if(!isMatch) {
+    if(!isMatched) {
         throw new Error('Unable to log in')
     }
     
