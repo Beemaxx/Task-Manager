@@ -42,8 +42,41 @@ router.post('/users/login', async (req,res) => {
     }
 })
 
+//Logging out for Users in single session
+
+router.post('/users/logout' , auth, async (req,res) => { 
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token
+            
+        })
+
+        await req.user.save()
+
+        res.send()
+
+    }catch(e) {
+
+        res.status(500).send()
+
+    }
+})
 
 
+//Logging out for Users in all sessions
+
+router.post('/users/logoutall', auth, async (req,res) => {
+    try {
+        req.user.tokens = []
+        
+        await req.user.save()
+
+        res.status(200).send()
+        
+    } catch(e) {
+        res.status(500).send()
+    }
+})
 
 
 // Find users
