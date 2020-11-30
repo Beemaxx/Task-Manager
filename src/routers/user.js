@@ -1,7 +1,9 @@
 const express = require('express')
 const { update } = require('../model/user.js')
 const router = new express.Router()
+const auth = require('../middleware/auth.js')
 const User = require('../model/user.js')
+const { compareSync } = require('bcryptjs')
 
 router.get('/test', (req,res)=>{
     res.send('This is a test')
@@ -45,15 +47,9 @@ router.post('/users/login', async (req,res) => {
 
 
 // Find users
-router.get('/users', async (req,res) => {
-
-    try {
-        const users = await User.find({})
-        res.status(201).send(users)
-
-    } catch(e) {
-        res.status(500).send(e)
-    }
+router.get('/users/me', auth ,async (req,res) => {
+    res.send(req.user)
+    
 
     // User.find({}).then((users)=>{
     //     res.status(201).send(users)
