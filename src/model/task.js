@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
 
-const Task = mongoose.model('Task', {
+const taskSchema = new mongoose.Schema( {
     Description : 
     {   type :String,
         require: true,
@@ -10,8 +9,16 @@ const Task = mongoose.model('Task', {
     Completed : 
     {   type : Boolean,
         default: false
-    }
-})
+    }, 
+    Owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        require : true,
+        ref: 'User',
+       
+    }, 
+},{ toJSON: {virtuals:true}})
+
+const Task = mongoose.model('Task', taskSchema)
 
 
 module.exports = Task

@@ -40,13 +40,29 @@ app.listen(port, () => {
     console.log('Server is up on ' +port)
 })
 
+
+const main = async () =>{
+    // find user who creates task
+    // const task = await Task.findById('5fc71cf9a05be542784f52c3')
+    // await task.populate('Owner').execPopulate()
+    // console.log(task.Owner)
+
+    // find tasks belong to user
+    const user = await User.findById('5fc757c50c5369428476dc4d').populate('tasks').exec()
+
+    console.log(user.tasks)
+    
+}
+
+main()
+
 const jwt = require('jsonwebtoken')
 
-const myFunction = async () => {
-    const token = jwt.sign({_id:'abc123'}, 'ramdomtoken',{expiresIn:'7 days'})
-    console.log(token)
+// const myFunction = async () => {
+//     const token = jwt.sign({_id:'abc123'}, 'ramdomtoken',{expiresIn:'7 days'})
+//     console.log(token)
 
-    const data = jwt.verify(token,'ramdomtoken')
-    console.log(data)
-}
-myFunction ()
+//     const data = jwt.verify(token,'ramdomtoken')
+//     console.log(data)
+// }
+// myFunction ()

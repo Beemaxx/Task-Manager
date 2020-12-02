@@ -1,9 +1,7 @@
 const express = require('express')
-const { update } = require('../model/user.js')
 const router = new express.Router()
 const auth = require('../middleware/auth.js')
 const User = require('../model/user.js')
-const { compareSync } = require('bcryptjs')
 
 router.get('/test', (req,res)=>{
     res.send('This is a test')
@@ -36,7 +34,7 @@ router.post('/users/login', async (req,res) => {
     try { 
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
-        res.send({user, token})
+        res.send({user,token})
     } catch(e) {
        res.status(400).send()
     }
@@ -117,7 +115,7 @@ router.get('/users/:id', async (req,res) =>{
 
 //Find ID & Update
 
-router.patch('/users/:id', async(req,res) => {
+router.patch('/users/me', auth, async(req,res) => {
         const updates = Object.keys(req.body)
         const AllowedUpdates = ['name','email','password','age']
         const isValidOperation = updates.every((update)=> AllowedUpdates.includes(update))
@@ -126,21 +124,11 @@ router.patch('/users/:id', async(req,res) => {
             return res.status(400).send({error : 'Invalid Updates'})
         }
     
-        const userid = req.params.id
         try {
-            const user = await User.findById(userid)
-            console.log(user)
-            console.log(updates)
-            updates.forEach((update) => user[update] = req.body[update])
-
-            await user.save()
-
-        // const update = await User.findByIdAndUpdate(userid, req.body, {new:true,runValidators: true})
-
-            if(!userid){
-                res.status(404).send()
-            }
-                res.send(user)
+            updates.forEach((update)=> req.user[update] = req.body[update])
+            await req.user.save()
+          
+            res.send(req.user)
         }catch(e) {
             res.status(400).send(e)
     }
@@ -148,19 +136,22 @@ router.patch('/users/:id', async(req,res) => {
 
 //Delete user
 
-router.delete('/users/:id', async (req,res)=>{
-    const UserID = req.params.id
+router.delete('/users/me', auth, async (req,res) => {
 
     try {
-        const DeleteUser = await User.findByIdAndDelete(UserID)
+        // const DeleteUser = await User.findByIdAndDelete(req.user._id)
 
-        if(!DeleteUser)
-        {
-            res.status(404).send()
-        }
-            res.status(200).send(DeleteUser + ' has been deleted')
+        // if(!DeleteUser)
+        // {
+        //     res.status(404).send()
+        // }
+        
+            // res.status(200).send(DeleteUser + ' has been deleted')
+
+        await req.user.remove()
+        res.send(req.user)
     }catch(e) {
-            res.status(404).send(e)
+            res.status(500).send()
     }
 })
 

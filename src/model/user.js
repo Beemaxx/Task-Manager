@@ -44,9 +44,32 @@ const UserSchema = new mongoose.Schema( {
         }
     }]
 
+}, { toJSON: {virtuals:true}})
+
+
+
+//virtual property
+
+ UserSchema.virtual('tasks',{
+    ref: 'Task' ,
+    localField: '_id',
+    foreignField: 'Owner'
 })
 
+
+
+
 //create token generator
+
+UserSchema.methods.toJSON = function () {
+    const user = this
+    const userObject = user.toObject()
+
+    delete userObject.password
+    delete userObject.tokens
+    
+    return userObject
+}
 
 UserSchema.methods.generateAuthToken = async function () {
     const user = this
@@ -62,7 +85,6 @@ UserSchema.methods.generateAuthToken = async function () {
 UserSchema.statics.findByCredentials = async (email, password) => {
     
     const user = await User.findOne({ email })
-    console.log(user)
 
     if(!user) {
 
