@@ -41,20 +41,20 @@ app.listen(port, () => {
 })
 
 
-const main = async () =>{
-    // find user who creates task
-    // const task = await Task.findById('5fc71cf9a05be542784f52c3')
-    // await task.populate('Owner').execPopulate()
-    // console.log(task.Owner)
+// const main = async () =>{
+//     // find user who creates task
+//     // const task = await Task.findById('5fc71cf9a05be542784f52c3')
+//     // await task.populate('Owner').execPopulate()
+//     // console.log(task.Owner)
 
-    // find tasks belong to user
-    const user = await User.findById('5fc757c50c5369428476dc4d').populate('tasks').exec()
+//     // find tasks belong to user
+//     const user = await User.findById('5fc757c50c5369428476dc4d').populate('tasks').exec()
 
-    console.log(user.tasks)
+//     console.log(user.tasks)
     
-}
+// }
 
-main()
+// main()
 
 const jwt = require('jsonwebtoken')
 
