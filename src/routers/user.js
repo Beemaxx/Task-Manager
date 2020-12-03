@@ -149,7 +149,7 @@ router.delete('/users/me', auth, async (req,res) => {
             // res.status(200).send(DeleteUser + ' has been deleted')
 
         await req.user.remove()
-        res.send(req.user)
+        res.send(req.user + ' has been deleted!')
     }catch(e) {
             res.status(500).send()
     }
