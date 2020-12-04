@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+
+
 const taskSchema = new mongoose.Schema( {
     Description : 
     {   type :String,
@@ -16,7 +18,10 @@ const taskSchema = new mongoose.Schema( {
         ref: 'User',
        
     }, 
-},{ toJSON: {virtuals:true}})
+},{timestamps:true},
+{ toJSON: {virtuals:true}})
+
+taskSchema
 
 const Task = mongoose.model('Task', taskSchema)
 

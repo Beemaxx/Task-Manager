@@ -37,7 +37,7 @@ app.use(taskRouter)
 
 
 app.listen(port, () => {
-    console.log('Server is up on ' +port)
+    console.log('Server is up on ' + port)
 })
 
 
@@ -51,7 +51,7 @@ app.listen(port, () => {
 //     const user = await User.findById('5fc757c50c5369428476dc4d').populate('tasks').exec()
 
 //     console.log(user.tasks)
-    
+
 // }
 
 // main()
@@ -66,3 +66,5 @@ const jwt = require('jsonwebtoken')
 //     console.log(data)
 // }
 // myFunction ()
+
+

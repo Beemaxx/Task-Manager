@@ -44,8 +44,10 @@ const UserSchema = new mongoose.Schema( {
             required: true
         }
     }]
-
-}, { toJSON: {virtuals:true}})
+}, 
+{timestamps:true}
+,
+{ toJSON: {virtuals:true}})
 
 
 
