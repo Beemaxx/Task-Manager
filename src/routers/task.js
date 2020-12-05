@@ -27,22 +27,45 @@ router.post('/tasks', auth, async (req,res)=>{
 })
 
 //Get all task
+//GET /tasks?limit=10&skip=10
+//GET /tasks?sortBy=createdAt:asc(desc)
 
 router.get('/tasks', auth , async (req,res) => {
-    console.log(req.user.populate('task'))
+    //console.log(req.user.populate('task'))
+    const match = {}
+    const sort = {}
+
+    if (req.query.Completed) {
+        match.Completed = req.query.Completed === 'true'
+
+    }
+
+    if (req.query.sortBy) {
+        const parts = req.query.sortBy.split(':')
+        sort[parts[0]] = parts[1] === 'desc' ? -1:1
+    }
+
     try { 
         //const task = await Task.find({Owner:req.user._id})
-        await req.user.populate('tasks').execPopulate()
+        await req.user.populate({
+            path: 'tasks',
+            match,
+            options: {
+                limit: parseInt(req.query.limit),
+                skip: parseInt(req.query.skip),
+                sort
+            }
+        }).execPopulate()
         res.send(req.user.tasks)
     } catch(e){
         res.status(500).send()
     }
 
-    Task.find({}).then((task) => {
-        res.status(201).send(task)
-    }).catch((error) =>{ 
-        res.status(400).send(error)
-    })
+    // Task.find({}).then((task) => {
+    //     res.status(201).send(task)
+    // }).catch((error) =>{ 
+    //     res.status(400).send(error)
+    // })
 })
 
 //Get one task
