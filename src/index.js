@@ -19,8 +19,8 @@ const upload = multer({
         fileSize: 1000000
     }, fileFilter(req,file,cb){
 
-        if (!file.originalname.match([/\.(doc|docx|pdf|jpeg|jpg)$/])) {
-            return cb( new Error('File must be either pdf, png, jpeg, jpg'))
+        if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
+            return cb( new Error('File must be either png, jpeg, jpg'))
         }
         cb(undefined,true)
         // cb(new Error('File must be a PDF'))
@@ -30,8 +30,12 @@ const upload = multer({
     }
 })
 
+
+
 app.post('/upload', upload.single('upload'), (req,res) => {
     res.send()
+}, (error,req,res,next ) => {
+    res.status(400).send({ error: error.message })
 })
 
 // app.use((req,res, next )=>{

@@ -162,7 +162,7 @@ const upload = multer({
         fileSize: 1000000
 
     }, fileFilter (req, file, cb){
-        if (!file.originalname.match([/\.(png|jpeg|jpg)$/])) {
+        if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
             return cb( new Error('File must be either png, jpeg, jpg'))
         }
         cb(undefined,true)
@@ -171,6 +171,8 @@ const upload = multer({
 
 router.post('/users/me/avatar', upload.single('avatar'), (req,res) => {
     res.send()
+}, (error, req, res,next ) => {
+    res.status(400).send({error: error.message})
 })
 
 
