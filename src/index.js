@@ -18,9 +18,8 @@ const upload = multer({
     limits : {
         fileSize: 1000000
     }, fileFilter(req,file,cb){
-        const filearray = [ ".pdf"]
 
-        if (file.originalname.match([/\.(doc|docx|pdf|jpeg|jpg)$/])) {
+        if (!file.originalname.match([/\.(doc|docx|pdf|jpeg|jpg)$/])) {
             return cb( new Error('File must be either pdf, png, jpeg, jpg'))
         }
         cb(undefined,true)
