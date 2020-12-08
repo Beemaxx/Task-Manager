@@ -12,32 +12,6 @@ require('./model/user')
 const app = express()
 const port = process.env.PORT || 3000
 
-const multer = require ('multer')
-const upload = multer({
-    dest: 'images',
-    limits : {
-        fileSize: 1000000
-    }, fileFilter(req,file,cb){
-
-        if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
-            return cb( new Error('File must be either png, jpeg, jpg'))
-        }
-        cb(undefined,true)
-        // cb(new Error('File must be a PDF'))
-        // cb(undefined,true)
-        // cb(undefined,false)
-        
-    }
-})
-
-
-
-app.post('/upload', upload.single('upload'), (req,res) => {
-    res.send()
-}, (error,req,res,next ) => {
-    res.status(400).send({ error: error.message })
-})
-
 // app.use((req,res, next )=>{
 //     // console.log (req.method, req.path)
 //     // next()
