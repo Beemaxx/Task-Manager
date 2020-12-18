@@ -3,7 +3,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /node-weather-website
+    destination: /Task-Manager
 hooks:
   BeforeInstall:
     - location: scripts/install_components.sh

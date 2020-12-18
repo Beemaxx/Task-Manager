@@ -1,3 +1,3 @@
 #!/bin/bash
 
-chmod -R 777 /node-weather-website
+chmod -R 777 /Task-Manager

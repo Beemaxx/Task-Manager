@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pm2 stop /node-weather-website/src/index.js
+pm2 stop /Task-Manager/src/index.js

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-cd /node-weather-website
+cd /Task-Manager
 
 sudo apt-get update
 sudo apt install nodejs
