@@ -4,9 +4,9 @@
 cd /Task-Manager
 
 
-yum apt-get update
-yum apt install nodejs
-yum apt install npm
+sudo apt-get update
+sudo apt install nodejs
+sudo apt install npm
 
 npm init
 npm install express
